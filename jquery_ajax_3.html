@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title> Ajax </title>
+<script src="js/jquery.js"></script>
+<script> // HTML에 가상 회원 데이터(XML)를 불러와 바인딩하는 예시
+$(function() {
+	/* $.ajax()메서드는 사용자가 지정한 URL 경로에 파일의 데이터를 전송하고
+	  입력한 URL 경로 파일로부터 요청한 데이터를 불러옵니다.
+	  이때 불러올 수 있는 외부 데이터로는 텍스트, HTML, XML, JSON 형식 등이 있으며,
+	  선택한 요소에 Ajax를 이용해 요청한 외부 데이터를 불러옵니다. */
+	$.ajax({
+		url:"js/dataset.xml",          // url에는 데이터 전송 및 요청할 외부 주소를 입력합니다. 기본값은 현재 페이지입니다.
+		dataType:"xml",               // dataType은 서버로부터 받아올 데이터 형식을 지정합니다. 데이터가 HTML일 경우에는 "html", XML일 경우에는 "XML", JSON일 경우에는 "json"이라고 입력합니다.
+		success:function(data) {      // success는 Ajax로 통신이 정상적으로 이루어지면 이벤트 핸들러를 실행합니다.
+			var $data = $(data).find("record");
+			if($data.length > 0) {
+				var tb = $("<table />");
+				/* 배열에 저장된 요소의 갯수만큼 메서드를 반복 실행합니다. 메서드를 실행할 때마다 매개변수 1, 매개변수 2에는
+				   배열에 저장된 요소와 인덱스의 값이 배열에 오름차순으로 대입 됩니다. */
+				$.each($data, function(i, o) {    
+					var $id = 
+					$(o).find("id").text(); // 매개변수 o의 find("id") text 값을 var $id 값에 대입함.
+					
+					var $first_name = 
+					$(o).find("first_name").text();
+					
+					var $last_name = 
+					$(o).find("last_name").text();
+					
+					var $email = 
+					$(o).find("email").text();
+					
+					var $gender = 
+					$(o).find("gender").text();
+
+					var row = $("<tr />").append(
+						$("<td />").text($id),
+						$("<td />").text($first_name),
+						$("<td />").text($last_name),
+						$("<td />").text($email),
+						$("<td />").text($gender)
+					);
+
+					tb.append(row);
+				});
+				$(".wrap").append(tb);
+			}
+		}
+	});
+});
+</script>
+</head>
+<body>
+	<div class="wrap"></div>
+</body>
+</html>
